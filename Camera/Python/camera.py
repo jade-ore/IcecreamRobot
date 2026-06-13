@@ -2,6 +2,8 @@ import cv2
 from picamzero import Camera
 import math
 import numpy as np
+import time
+import cppyy
 
 def average_chunk(chunk):
     if (chunk.shape[0] * chunk.shape[1] == 0):
@@ -21,10 +23,11 @@ def average_chunk(chunk):
     
     return average_rgb
 
+start = time.perf_counter()
 cam = Camera()
 cam.take_photo("skibidi.jpg")
 
-image = cv2.imread("picture.jpeg")
+image = cv2.imread("Photos/IMG_0833.jpeg")
 image = cv2.resize(image, None, fx=0.05, fy=0.05)
 
 num_rows = 10
@@ -49,7 +52,7 @@ for row in range(num_rows):
 
     squished.append(chunk_row)
 
-
-
 cv2.imwrite("compressed.jpg", np.array(squished))
         
+end = time.perf_counter()
+print(f'this program used {end - start} seconds')

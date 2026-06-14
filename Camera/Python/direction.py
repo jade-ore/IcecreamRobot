@@ -39,6 +39,7 @@ def get_direction(sidewalk_array):
         print("Right side has grass")
         return "left"
     else:
+        print("No sides have grass")
         return "straight"
     
 def send_direction(image):

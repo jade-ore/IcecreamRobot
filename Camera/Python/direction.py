@@ -1,9 +1,7 @@
 import cv2
-from picamzero import Camera
-import math
-import numpy as np
-import time
 import serial
+
+arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1) 
 
 def get_sidewalk(image):
     image = cv2.resize(image, (25, 25))
@@ -43,7 +41,10 @@ def get_direction(sidewalk_array):
     else:
         return "straight"
     
-print(get_direction(get_sidewalk(cv2.imread("/home/james/Downloads/IMG_5118.jpeg"))))
+def send_direction(image):
+    arduino.write(bytes(get_direction(get_sidewalk(image))), 'utf-8')
+
+# print(get_direction(get_sidewalk(cv2.imread("/home/james/Downloads/IMG_5118.jpeg"))))
 
 
 

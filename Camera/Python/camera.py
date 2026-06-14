@@ -3,7 +3,7 @@ from picamzero import Camera
 import math
 import numpy as np
 import time
-import cppyy
+import serial
 
 def average_chunk(chunk):
     if (chunk.shape[0] * chunk.shape[1] == 0):
@@ -23,36 +23,46 @@ def average_chunk(chunk):
     
     return average_rgb
 
+
+# ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+
+# try:
+#     while True:
+#         ser.write(b"icecream")
+#         print("Sent data")
+#         time.sleep(1)
+# except:
+#     ser.close()
+#     print("clsoe the serial")
+
+
 start = time.perf_counter()
 cam = Camera()
-cam.take_photo("skibidi.jpg")
-
 image = cv2.imread("Photos/IMG_0833.jpeg")
-image = cv2.resize(image, None, fx=0.05, fy=0.05)
 
-num_rows = 10
-num_cols = 10
+image = cv2.resize(image, (25, 25))
 
-row_size = math.ceil(image.shape[0] / num_rows)
-col_size = math.ceil(image.shape[1] / num_cols)
+cv2.imwrite("Photos/resized.jpeg", image)
 
-squished = []
-for row in range(num_rows):
-    chunk_row = []
-    for col in range(num_cols):
+is_sidewalk_array = []
+for row in image:
+    row_pixels = []
+    for pixel in row:
+        if pixel[2] > 127:
+            row_pixels.append(True)
+        else:
+            row_pixels.append(False)
+    is_sidewalk_array.append(row_pixels)
 
-        y_start = row * col_size
-        y_end = (row + 1) * col_size
-        x_start = col * col_size
-        x_end = (col + 1) * col_size
+picture = []
+for row in is_sidewalk_array:
+    row_pixels = []
+    for pixel in row:
+        if pixel:
+            row_pixels.append([255,255,255])
+        else:
+            row_pixels.append([0,0,0])
         
-        chunk = image[y_start:y_end, x_start:x_end]
-        chunk = average_chunk(chunk)
-        chunk_row.append(chunk)
+    picture.append(row_pixels)
 
-    squished.append(chunk_row)
-
-cv2.imwrite("compressed.jpg", np.array(squished))
-        
-end = time.perf_counter()
-print(f'this program used {end - start} seconds')
+cv2.imwrite("Photos/blackwhite.jpg", np.array(picture))

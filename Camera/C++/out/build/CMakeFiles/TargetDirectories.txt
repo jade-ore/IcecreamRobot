@@ -1,0 +1,3 @@
+/home/icecream/Documents/IcecreamRobot/Camera/C++/out/build/CMakeFiles/Camera.dir
+/home/icecream/Documents/IcecreamRobot/Camera/C++/out/build/CMakeFiles/edit_cache.dir
+/home/icecream/Documents/IcecreamRobot/Camera/C++/out/build/CMakeFiles/rebuild_cache.dir
